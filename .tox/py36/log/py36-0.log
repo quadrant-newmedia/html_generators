@@ -1,7 +1,0 @@
-action: py36, msg: getenv
-cwd: /Users/alex/projects/django_dynamic_path/.tox
-cmd: /Users/alex/projects/django_dynamic_path/venv/bin/python3 -m virtualenv --no-download --python /Users/alex/projects/django_dynamic_path/venv/bin/python3 py36
-created virtual environment CPython3.6.5.final.0-64 in 1387ms
-  creator CPython3Posix(dest=/Users/alex/projects/django_dynamic_path/.tox/py36, clear=False, global=False)
-  seeder FromAppData(download=False, pip=latest, setuptools=latest, wheel=latest, via=copy, app_data_dir=/Users/alex/Library/Application Support/virtualenv/seed-app-data/v1)
-  activators BashActivator,CShellActivator,FishActivator,PowerShellActivator,PythonActivator,XonshActivator
