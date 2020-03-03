@@ -1,0 +1,4 @@
+action: py36, msg: envreport
+cwd: /Users/alex/projects/django_dynamic_path
+cmd: /Users/alex/projects/django_dynamic_path/.tox/py36/bin/python -m pip freeze
+django-dynamic-path-alex-81==0.0.1
