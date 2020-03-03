@@ -8,10 +8,10 @@ setuptools.setup(
     version="0.0.1",
     author="Alex Fischer",
     author_email="alex@quadrant.net",
-    description="TODO",
+    description="A django path() replacement enabling truly dynamic urls",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="TODO",
+    # url="TODO",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -19,4 +19,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    install_requires=["Django>=2.2,<3.1"],
 )
