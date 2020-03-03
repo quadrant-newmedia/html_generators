@@ -1,1 +1,1 @@
-python -Wa manage.py test django_dynamic_path/tests/
+python -Wa manage.py test APP_NAME/tests/

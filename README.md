@@ -1,9 +1,14 @@
-# django_dynamic_path
+# APP_NAME
 
-A django path() replacement enabling truly dynamic urls.
+This is a "seed" project for creating a reusable django app, with tests, using tox.
+For more advanced setup, see https://www.b-list.org/weblog/2018/apr/02/testing-django/
 
-Rather than mapping a regular expression to a view function, you map a "resolver function" to a view function. The resolver function receives the path as an argument, and decides whether or not it wants to handle the request. If it does want to the handle the request, it should return a tuple of args and kwargs, which will be passed to the view function.
+## TODO 
+- do a search and replace on this project, replacing APP_NAME with the actual name of your app
+- rename the APP_NAME directory
+- create venv
+- run: pip install -r requirements.txt
+- run: tox
+- verify setup.py
+- see https://packaging.python.org/tutorials/packaging-projects/ for building and publishing options
 
-## Use Cases
-
-TODO
