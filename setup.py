@@ -8,10 +8,10 @@ setuptools.setup(
     version="0.0.0",
     author="Alex Fischer",
     author_email="alex@quadrant.net",
-    description="A django path() replacement enabling truly dynamic urls",
+    description="TODO",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url="TODO",
+    # url="TODO - github repo",
     packages=['APP_NAME', 'APP_NAME.tests'],
     classifiers=[
         "Programming Language :: Python :: 3",
