@@ -12,7 +12,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     # url="TODO - github repo",
-    packages=['APP_NAME', 'APP_NAME.tests'],
+    packages=['APP_NAME'],
+    package_dir={'': 'src'},
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

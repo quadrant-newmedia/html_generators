@@ -10,8 +10,8 @@ For the python documentation on packagin, see https://packaging.python.org/tutor
 ## How To Use:
 - clone this repo, then delete the origin remote
 - do a search and replace on this project, replacing APP_NAME with the actual name of your app
-- rename the APP_NAME directory
-- create venv
+- rename the src/APP_NAME directory
+- create venv, activate
 - run: pip install -r requirements.txt
 - run: tox (verify that the tests are working)
 - verify setup.py
