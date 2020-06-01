@@ -4,4 +4,7 @@ rm -r dist/*
 python setup.py sdist bdist_wheel
 # Don't enable until you're really ready!
 # twine upload dist/*
+git add -A
+git commit
+git tag -m '' v`cat VERSION`
 git push origin
