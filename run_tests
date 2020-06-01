@@ -1,1 +1,1 @@
-python -Wa manage.py test APP_NAME/tests/
+python -Wa manage.py test tests/
