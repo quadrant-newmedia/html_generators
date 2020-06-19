@@ -7,15 +7,15 @@ with open('VERSION', 'r') as fh:
     version = fh.read()
 
 setuptools.setup(
-    name="APP_NAME",
+    name="html_generators",
     version=version,
     author="Alex Fischer",
     author_email="alex@quadrant.net",
-    description="TODO",
+    description="Functional, streaming approach to HTML generation",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url="TODO - github repo",
-    packages=['APP_NAME'],
+    url="https://github.com/quadrant-newmedia/html_generators",
+    packages=['html_generators'],
     package_dir={'': 'src'},
     include_package_data=True,
     classifiers=[
@@ -24,5 +24,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=["Django>=2.2,<3.1"],
+    install_requires=[],
 )

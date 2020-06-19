@@ -1,1 +1,4 @@
 graft src
+include README.md
+include RELEASE_NOTES.md
+include VERSION
