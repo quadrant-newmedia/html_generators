@@ -1,8 +1,17 @@
 from html import escape
 
+class SafeString(str):
+	'''
+		This object can be used anywhere a string can be used. 
+		
+		Further, since it implements __html__(self), many frameworks (like Django) know that it doesn't need further escaping.
+	'''
+	def __html__(self):
+		return self
+
 class HTMLGenerator:
 	def __str__(self):
-		return ''.join(self)
+		return SafeString(''.join(iter(self)))
 
 def yield_child(child):
 	if not child :
