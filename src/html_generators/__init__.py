@@ -1,5 +1,9 @@
+'''
+Note - we recommend importing as:
+    import html_generators as h
+'''
 from .document import Document
-# Notice - we recommend importing elements with an alias of 'e', to keep your code concise
-from . import elements as e
+# Note - imports Element and VoidElement, as well as all html elements
+from .elements import *
 from .fragment import Fragment
 from .mark_safe import MarkSafe
