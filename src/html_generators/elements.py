@@ -21,6 +21,9 @@ def _open_tag(name, attrs):
 	yield '>'
 
 class Element(HTMLGenerator):
+	'''
+		A Normal HTML Element (see https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
+	'''
 	def __init__(self, _name, *_children, **attrs):
 		self.name = _name
 		self.children = _children
@@ -30,14 +33,34 @@ class Element(HTMLGenerator):
 		yield from _open_tag(self.name, self.attrs)
 		yield from yield_children(self.children)
 		yield f'</{self.name}>'
-
 class VoidElement(HTMLGenerator):
+	'''
+		A Void HTML Element (see https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
+	'''
 	def __init__(self, _name, **attrs):
 		self.name = _name
 		self.attrs = attrs
 
 	def __iter__(self):
 		yield from _open_tag(self.name, self.attrs)
+class RawTextElement(HTMLGenerator):
+	'''
+		A Raw Text HTML Element (script/style)
+		(see https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
+
+		These elements cannot have their contents escaped, because html entities are not parsed.
+
+		You should NOT be putting untrusted user content in here.
+	'''
+	def __init__(self, _name, content='', **attrs):
+		self.name = _name
+		self.content = content
+		self.attrs = attrs
+
+	def __iter__(self):
+		yield from _open_tag(self.name, self.attrs)
+		yield self.content
+		yield f'</{self.name}>'
 
 # Taken from https://html.spec.whatwg.org/multipage/syntax.html June 19, 2020
 _VOID_ELEMENTS = [
@@ -56,9 +79,14 @@ _VOID_ELEMENTS = [
 	'track',
 	'wbr',
 ]
+_RAW_TEXT_ELEMENTS = ['script', 'style']
 def _smart_element(name):
 	if name in _VOID_ELEMENTS:
 		return partial(VoidElement, name)
+	if name in _RAW_TEXT_ELEMENTS:
+		return partial(RawTextElement, name)
+
+	# NOTE - we're ignoring some special element types (the template element, escapable raw text elements) as "normal" -> it makes little to no difference in terms of the html we generate
 	return partial(Element, name)
 
 # For convenience, define every known HTML element.

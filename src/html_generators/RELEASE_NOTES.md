@@ -1,3 +1,7 @@
+# 1.1.0
+
+Do not escape contents of `<script>` and `<style>`
+
 # 1.0.0
 
 Changed import names in top-level module. We now import all names directly from `elements.py`, and dropped the 'e' alias. 
