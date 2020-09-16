@@ -1,8 +1,12 @@
-# 1.2.0
+### 1.2.1
+
+Ensure that children with value 0 (any number type) are rendered.
+
+## 1.2.0
 
 Support "Safe Strings" from frameworks like Django. Children with `__html__()` method will not be escaped.
 
-# 1.1.0
+## 1.1.0
 
 Do not escape contents of `<script>` and `<style>`
 

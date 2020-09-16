@@ -14,7 +14,7 @@ class HTMLGenerator:
 		return SafeString(''.join(iter(self)))
 
 def yield_child(child):
-	if not child :
+	if child is None or child is False :
 		return
 	if isinstance(child, HTMLGenerator):
 		yield from child
