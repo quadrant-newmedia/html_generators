@@ -25,3 +25,5 @@ assert_equal(str(h.Fragment(
     h.Div('b'),
     'final <> text',
 )), '''loose text<div>a</div>more text<div>b</div>final &lt;&gt; text''')
+
+assert_equal(str(h.Comment('My favorite operators are > and <!')), '<!--My favorite operators are > and <!-->')

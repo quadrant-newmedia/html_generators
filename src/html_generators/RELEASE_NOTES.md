@@ -1,3 +1,5 @@
+## 1.3.0
+
 ### 1.2.1
 
 Ensure that children with value 0 (any number type) are rendered.
