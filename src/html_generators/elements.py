@@ -4,7 +4,7 @@ from functools import partial
 def _open_tag(name, attrs):
 	yield '<'+name
 	for key, value in attrs.items() :
-		if value == False or value is None :
+		if value is False or value is None :
 			continue
 		yield ' '
 		'''

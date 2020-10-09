@@ -1,8 +1,14 @@
+### 1.3.1
+
+Ensure that attributes with value 0 are rendered (the only values skipped are False and None).
+
 ## 1.3.0
+
+Add support for comments.
 
 ### 1.2.1
 
-Ensure that children with value 0 (any number type) are rendered.
+Ensure that children with value 0 (any number type) are rendered (the only values skipped are False and None).
 
 ## 1.2.0
 

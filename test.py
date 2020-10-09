@@ -16,7 +16,7 @@ assert str(h.Document(
         _class="a",
     )
 )) == '''<!DOCTYPE html>
-<script>alert("Hello, World!");</script><body foo="bar" class="a">Direct body text with &quot;&lt;&gt;&amp;&#x27; special characters<div>a</div><div div-index="1">b</div><div div-index="2">c</div><input type="text" value="&lt;&amp;&#x27;&#x27;&gt;"></body>'''
+<script>alert("Hello, World!");</script><body foo="bar" class="a">Direct body text with &quot;&lt;&gt;&amp;&#x27; special characters<div div-index="0">a</div><div div-index="1">b</div><div div-index="2">c</div><input type="text" value="&lt;&amp;&#x27;&#x27;&gt;"></body>'''
 
 assert_equal(str(h.Fragment(
     'loose text',
@@ -27,3 +27,7 @@ assert_equal(str(h.Fragment(
 )), '''loose text<div>a</div>more text<div>b</div>final &lt;&gt; text''')
 
 assert_equal(str(h.Comment('My favorite operators are > and <!')), '<!--My favorite operators are > and <!-->')
+
+
+# Ensure children and attribute with value of 0 are rendered
+assert_equal(str(h.Div(0, tabindex=0)), '<div tabindex="0">0</div>')
