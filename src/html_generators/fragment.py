@@ -4,7 +4,7 @@ class Fragment(HTMLGenerator):
     '''
         Represents a fragment of one or more html nodes.
 
-        Note that you generally won't need to use this class, since you can pass iterables directly Document, Element, etc. 
+        Note that you generally won't need to use this class, since you can pass iterables directly to Document, Element, etc. 
 
         If you need to render multiple nodes directly to a string, however, you can use this class.
     '''

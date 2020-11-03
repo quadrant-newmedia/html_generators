@@ -7,4 +7,5 @@ from .comment import Comment
 # Note - imports Element and VoidElement, as well as all html elements
 from .elements import *
 from .fragment import Fragment
+from .join import Join
 from .mark_safe import MarkSafe

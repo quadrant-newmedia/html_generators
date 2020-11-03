@@ -1,3 +1,7 @@
+## 1.4
+
+Added `h.Join(joiner, iterable)`
+
 ### 1.3.1
 
 Ensure that attributes with value 0 are rendered (the only values skipped are False and None).
