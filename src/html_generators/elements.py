@@ -8,13 +8,15 @@ def _open_tag(name, attrs):
 			continue
 		yield ' '
 		'''
-			lstrip('_')
-				this allows you to prefix attribute names with an underscore when those names clash with python built-ins
+			strip('_')
+				this allows you to postfix attribute names with an underscore when those names clash with python keywords (as recommended in PEP 8 - https://www.python.org/dev/peps/pep-0008/#id46)
+
+				Note- we use strip, rather than rstrip, for backward compatibility (we used to recommend prefixing with an _, but now recommend postfix, to align with PEP 8)
 
 			replace('_', '-')
-				'-' is important in attribute names, '_' is not. You can write python keyword argument names with '_' and they will converted to '-'
+				'-' is important in attribute names (for data-* attributes and custom attributes), '_' is not. You can write python keyword argument names with '_' and they will converted to '-'
 		'''
-		yield key.lstrip('_').replace('_', '-')
+		yield key.strip('_').replace('_', '-')
 		if value is True :
 			continue
 		yield f'="{escape(str(value))}"'

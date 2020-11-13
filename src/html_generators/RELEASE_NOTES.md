@@ -1,3 +1,7 @@
+### 1.4.1
+
+Attributes which clash with python keywords can now be postfixed with '_', as well as prefixed (PEP 8 recommends postfix).
+
 ## 1.4
 
 Added `h.Join(joiner, iterable)`
