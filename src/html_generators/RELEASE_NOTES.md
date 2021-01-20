@@ -1,3 +1,6 @@
+## 1.5.0
+Added `classes` and `styles` utility functions, and `add_classes` and `add_styles` methods to `Element`.
+
 ### 1.4.1
 
 Attributes which clash with python keywords can now be postfixed with '_', as well as prefixed (PEP 8 recommends postfix).

@@ -1,4 +1,5 @@
 from .base import HTMLGenerator, escape, yield_children
+from .utils import classes, styles
 from functools import partial
 
 def _open_tag(name, attrs):
@@ -7,20 +8,25 @@ def _open_tag(name, attrs):
 		if value is False or value is None :
 			continue
 		yield ' '
-		'''
-			strip('_')
-				this allows you to postfix attribute names with an underscore when those names clash with python keywords (as recommended in PEP 8 - https://www.python.org/dev/peps/pep-0008/#id46)
-
-				Note- we use strip, rather than rstrip, for backward compatibility (we used to recommend prefixing with an _, but now recommend postfix, to align with PEP 8)
-
-			replace('_', '-')
-				'-' is important in attribute names (for data-* attributes and custom attributes), '_' is not. You can write python keyword argument names with '_' and they will converted to '-'
-		'''
-		yield key.strip('_').replace('_', '-')
+		yield key
 		if value is True :
 			continue
 		yield f'="{escape(str(value))}"'
 	yield '>'
+
+def _normalize(attr):
+	'''
+		strip('_')
+			this allows you to postfix attribute names with an underscore when those names clash with python keywords (as recommended in PEP 8 - https://www.python.org/dev/peps/pep-0008/#id46)
+
+			Note- we use strip, rather than rstrip, for backward compatibility (we used to recommend prefixing with an _, but now recommend postfix, to align with PEP 8)
+
+		replace('_', '-')
+			'-' is important in attribute names (for data-* attributes and custom attributes), '_' is not. You can write python keyword argument names with '_' and they will converted to '-'
+
+			Technically, '_' characters are allowed in custom attribute names (I think), but I've never seen them used. We do not currently support them.
+	'''
+	return attr.strip('_').replace('_', '-')
 
 class Element(HTMLGenerator):
 	'''
@@ -28,8 +34,24 @@ class Element(HTMLGenerator):
 	'''
 	def __init__(self, _name, *_children, **attrs):
 		self.name = _name
+
+		'''
+			Note - we haven't written documentation for this package yet, but we should officially document these, and endorse their mutation (after initialization, before rendering).
+
+			This is especially helpful if you want to create "wrapper elements" which mutate their children.
+		'''
 		self.children = _children
-		self.attrs = attrs
+
+		'''
+			Note we normalize attrs at initialization, rather than at rendering time.
+			This makes methods like add_classes simpler.
+		'''
+		self.attrs = {_normalize(attr): value for attr, value in attrs.items()}
+
+	def add_classes(self, *_classes):
+		self.attrs['class'] = classes(self.attrs.get('class'), *_classes)
+	def add_styles(self, *_styles):
+		self.attrs['style'] = styles(self.attrs.get('style'), *_styles)
 
 	def __iter__(self):
 		yield from _open_tag(self.name, self.attrs)
