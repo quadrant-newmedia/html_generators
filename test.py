@@ -28,6 +28,7 @@ assert_equal(str(h.Fragment(
 
 assert_equal(str(h.Comment('My favorite operators are > and <!')), '<!--My favorite operators are > and <!-->')
 
+assert_equal(str(h.Input(__foo_bar_=True)), '<input foo-bar>')
 
 # Ensure children and attribute with value of 0 are rendered
 assert_equal(str(h.Div(0, tabindex=0)), '<div tabindex="0">0</div>')

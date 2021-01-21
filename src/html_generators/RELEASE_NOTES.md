@@ -1,3 +1,6 @@
+### 1.5.1
+Fix bug introduced in 1.5.0 (void elements and raw text elements were not normalizing attribute names).
+
 ## 1.5.0
 Added `classes` and `styles` utility functions, and `add_classes` and `add_styles` methods to `Element`.
 

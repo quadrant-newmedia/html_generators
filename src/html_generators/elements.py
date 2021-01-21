@@ -57,17 +57,16 @@ class Element(HTMLGenerator):
 		yield from _open_tag(self.name, self.attrs)
 		yield from yield_children(self.children)
 		yield f'</{self.name}>'
-class VoidElement(HTMLGenerator):
+class VoidElement(Element):
 	'''
 		A Void HTML Element (see https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
 	'''
 	def __init__(self, _name, **attrs):
-		self.name = _name
-		self.attrs = attrs
+		super().__init__(_name, **attrs)
 
 	def __iter__(self):
 		yield from _open_tag(self.name, self.attrs)
-class RawTextElement(HTMLGenerator):
+class RawTextElement(Element):
 	'''
 		A Raw Text HTML Element (script/style)
 		(see https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
@@ -77,9 +76,8 @@ class RawTextElement(HTMLGenerator):
 		You should NOT be putting untrusted user content in here.
 	'''
 	def __init__(self, _name, content='', **attrs):
-		self.name = _name
+		super().__init__(_name, **attrs)
 		self.content = content
-		self.attrs = attrs
 
 	def __iter__(self):
 		yield from _open_tag(self.name, self.attrs)
