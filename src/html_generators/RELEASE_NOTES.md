@@ -1,3 +1,6 @@
+## 1.6.0
+`Join()` is now smarter - ignores None/False items, and items need not be HTMLGenerators
+
 ### 1.5.1
 Fix bug introduced in 1.5.0 (void elements and raw text elements were not normalizing attribute names).
 
