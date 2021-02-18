@@ -1,3 +1,6 @@
+## 1.7.0
+Added cloning methods
+
 ## 1.6.0
 `Join()` is now smarter - ignores None/False items, and items need not be HTMLGenerators
 

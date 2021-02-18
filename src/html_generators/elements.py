@@ -27,6 +27,8 @@ def _normalize(attr):
 			Technically, '_' characters are allowed in custom attribute names (I think), but I've never seen them used. We do not currently support them.
 	'''
 	return attr.strip('_').replace('_', '-')
+def _normalize_dict(attrs):
+	return {_normalize(attr): value for attr, value in attrs.items()}
 
 class Element(HTMLGenerator):
 	'''
@@ -46,12 +48,24 @@ class Element(HTMLGenerator):
 			Note we normalize attrs at initialization, rather than at rendering time.
 			This makes methods like add_classes simpler.
 		'''
-		self.attrs = {_normalize(attr): value for attr, value in attrs.items()}
+		self.attrs = _normalize_dict(attrs)
 
+	# TODO - I think we should remove (or at least deprecate) these
+	# Things are simpler if keep element immutable, and promote our cloning functions, instead
 	def add_classes(self, *_classes):
 		self.attrs['class'] = classes(self.attrs.get('class'), *_classes)
 	def add_styles(self, *_styles):
 		self.attrs['style'] = styles(self.attrs.get('style'), *_styles)
+
+	def with_attrs(self, **attrs):
+		clone = self.__class__(self.name)
+		clone.children = list(self.children)
+		clone.attrs = dict(self.attrs, **_normalize_dict(attrs))
+		return clone
+	def with_classes(self, *_classes):
+		return self.with_attrs(class_=classes(self.attrs.get('class'), *_classes))
+	def with_styles(self, *_styles):
+		return self.with_attrs(style=styles(self.attrs.get('style'), *_styles))
 
 	def __iter__(self):
 		yield from _open_tag(self.name, self.attrs)

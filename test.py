@@ -32,3 +32,7 @@ assert_equal(str(h.Input(__foo_bar_=True)), '<input foo-bar>')
 
 # Ensure children and attribute with value of 0 are rendered
 assert_equal(str(h.Div(0, tabindex=0)), '<div tabindex="0">0</div>')
+
+assert_equal(str(h.Img(_class='a').with_classes('b')), '<img class="a b">')
+assert_equal(str(h.Div(h.I('a'), _class='a').with_classes('b')), '<div class="a b"><i>a</i></div>')
+assert_equal(str(h.Img(style='a: b').with_styles('b: c')), '<img style="a: b; b: c">')
