@@ -3,3 +3,7 @@ wheel
 tox
 twine
 -e .
+
+# for testing:
+markupsafe
+django

@@ -14,7 +14,7 @@ Attribute values are always escaped.
 ### Incremental Adoption
 You can use html_generators to generate all of your site's html, or mix it with your existing framework's template system. Ie- in Django, you might implement all of your custom template tags with html_generators, but use the template system to build the majority of your pages).
 
-"Rendering"(TODO: link to rendering) any of our objects generates "safe strings" (which implement `__html__()`). Django and markupsafe (and possibly other python modules) 
+"Rendering"(TODO: link to rendering) any of our objects generates "safe strings" (which implement `__html__()`). Django and markupsafe (and possibly other python modules)  
 
 ### Lazy/Streaming
 ### Performance
@@ -33,6 +33,11 @@ This section gives a high-level overview of all the features of this package. Th
 ### django.DjangoTemplate
 
 ## Tips/Warnings
-### Render Only Once
+### Don't List - Generate!
+Be sure to mention that you can't render multiple times
 ### Updating Elements <a name="updating_elements"></a>
 ### RawTextElement <a name="raw_text_elements"></a>
+
+## You Can't Do This With Templates!
+### Wrapper Components
+### HTML in Attributes
