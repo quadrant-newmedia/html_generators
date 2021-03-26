@@ -37,18 +37,7 @@ class Element(HTMLGenerator):
 	'''
 	def __init__(self, name, *children, **attrs):
 		self._name = name
-
-		'''
-			Note - we haven't written documentation for this package yet, but we should officially document these, and endorse their mutation (after initialization, before rendering).
-
-			This is especially helpful if you want to create "wrapper elements" which mutate their children.
-		'''
 		self._children = children
-
-		'''
-			Note we normalize attrs at initialization, rather than at rendering time.
-			This makes methods like add_classes simpler.
-		'''
 		self._attrs = _normalize_dict(attrs)
 
 	def with_attrs(self, **attrs):
@@ -60,6 +49,8 @@ class Element(HTMLGenerator):
 		return self.with_attrs(class_=classes(self._attrs.get('class'), *_classes))
 	def with_styles(self, *_styles):
 		return self.with_attrs(style=styles(self._attrs.get('style'), *_styles))
+
+	# TODO - __getitem__ for reading attrs? Occasionally it's useful to read these (ie check the href of a link, ensure user is permitted to see it)
 
 	def __iter__(self):
 		yield from _open_tag(self._name, self._attrs)
