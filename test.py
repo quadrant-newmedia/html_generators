@@ -27,7 +27,7 @@ assert_equal(str(h.Fragment(
 
 assert_equal(str(h.Comment('My favorite operators are > and <!')), '<!--My favorite operators are > and <!-->')
 
-assert_equal(str(h.Input(__foo_bar_=True)), '<input foo-bar>')
+assert_equal(str(h.Input(foo_bar_=True)), '<input foo-bar>')
 
 # Ensure children and attribute with value of 0 are rendered
 assert_equal(str(h.Div(0, tabindex=0)), '<div tabindex="0">0</div>')
@@ -44,7 +44,19 @@ assert_equal(str(h.Join(h.Br(), [None, 1, None, 2, None, h.I()])), '1<br>2<br><i
 
 assert_equal(str(h.A(h.MarkSafe('<i>'))), '<a><i></a>')
 
-# TODO - classes, styles
+assert_equal(h.classes(
+    'fixed',
+    False and 'NOT',
+    None and 'NOT',
+    True and 'conditional',
+), 'fixed conditional')
+assert_equal(h.styles(
+    'display: block',
+    False and 'NOT',
+    None and 'NOT',
+    True and 'color: green'
+), 'display: block; color: green')
+
 
 import markupsafe
 # Ensure we don't escape markupafe.Markup
@@ -59,3 +71,12 @@ assert_equal(str(h.Fragment(mark_safe('<i>'))), '<i>')
 # Ensure django doesn't escape us
 assert_equal(conditional_escape(str(h.I())), '<i></i>')
 
+# "Infinite streaming response"
+from django.http import StreamingHttpResponse
+from django.conf import settings
+from itertools import count, islice
+settings.configure()
+infinite_doc = h.Document(h.Div(x) for x in count())
+bits = islice(StreamingHttpResponse(infinite_doc), 100)
+assert_equal(''.join(b.decode() for b in bits), '''<!DOCTYPE html>
+<div>0</div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24''')

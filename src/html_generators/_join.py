@@ -1,16 +1,18 @@
-from .base import HTMLGenerator, generate_child_html
+from ._base import HTMLGenerator, generate_child_html
 from typing import Any, Iterable, Iterator
 
 class Join(HTMLGenerator):
 	'''
-		Similar to str.join
-		
-		The "joiner" and the "items" need not be strings (they can be other HTMLGenerators, numbers, etc.).
+	Similar to str.join
+	
+	The "joiner" and the "items" need not be strings (they can be other HTMLGenerators, numbers, etc.).
 
-		"items" MAY contain "empty values" (None, False) - they will NOT cause an extra joiner to be rendered.
+	"items" MAY contain "empty values" (None, False) - 
+	they will NOT cause an extra joiner to be rendered.
 	'''
 	def __init__(self, joiner: Any, items: Iterable[Any]):
-		self._joiner = joiner
+		# Stringify joiner only once.
+		self._joiner = str(joiner)
 		self._items = items
 
 	def __iter__(self):
@@ -22,7 +24,7 @@ class Join(HTMLGenerator):
 				continue
 
 			if not first_item :
-				yield from self._joiner
+				yield self._joiner
 			else :
 				first_item = False
 

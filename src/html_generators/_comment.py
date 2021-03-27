@@ -1,4 +1,4 @@
-from .base import HTMLGenerator
+from ._base import HTMLGenerator
 
 class Comment(HTMLGenerator):
 	'''

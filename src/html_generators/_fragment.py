@@ -1,4 +1,4 @@
-from .base import HTMLGenerator, generate_html
+from ._base import HTMLGenerator, generate_html
 
 class Fragment(HTMLGenerator):
 	'''

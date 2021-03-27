@@ -3,26 +3,52 @@ from typing import Any, Iterable, Iterator
 
 class SafeString(str):
 	'''
-		A str of HTML that plays nicely with other web frameworks.
+	A str of HTML that plays nicely with other web frameworks.
 
-		These objects will _not_ be escaped when passed to:
-		- django.utils.html.conditional_escape
-		- markupsafe.escape
+	These objects will _not_ be escaped when passed to:
+	- django.utils.html.conditional_escape
+	- markupsafe.escape
 	'''
-	def __html__(self):
+	def __html__(self) -> str:
 		return self
 
 class HTMLGenerator:
 	'''
-		An object representing a balanced chunk of HTML.
+	An object representing a balanced chunk of HTML.
 
-		This is the base class for all of our public classes.
-		It is not intended to be used directly by end users.
+	This is the base class for all of our public classes.
+	It is not intended to be used directly by end users.
 	'''
-	def __str__(self):
+
+	def __iter__(self) -> Iterator[str]:
+		'''
+		Generate a sequence of HTML strings.
+
+		Generally, users will be casting/coercing HTMLGenerators to str, but
+		their iterable nature is sometimes useful. For example, you can pass
+		them directly to django.http.StreamingHttpResponse().
+		'''
+		raise NotImplementedError()
+
+	def __str__(self) -> SafeString:
+		'''
+		Convert to a balanced string of HTML.
+
+		Instances are only intended to be converted to a string once.
+		Calling this multiple times _may_ produce inconsistent results.
+		'''
 		return SafeString(''.join(iter(self)))
 
 def generate_child_html(child: Any) -> Iterator[str]:
+	'''
+	Generate a sequence of HTML strings from the given object.
+
+	The sequence of strings, as a whole, will be a balanced HTML fragment.
+
+	We can't really describe the behaviour of this function any more 
+	concisely than the code does, so just read the code.
+	'''
+
 	# use case: "conditional children"
 	# ie: h.Div(some_test() and 'A conditional child')
 	# Do _not_ just check "if child" - h.Div(0) should render <div>0</div>

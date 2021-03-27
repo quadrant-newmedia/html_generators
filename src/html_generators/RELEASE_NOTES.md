@@ -1,3 +1,10 @@
+# 2
+
+Breaking changes:
+- removed add_classes, add_styles
+- attribute normalization - trim only trailing underscores (be sure to replace "_class" with "class_")
+- all submodule (other than django) are private - look for imported submodules
+
 ## 1.7.0
 Added cloning methods
 
@@ -12,7 +19,7 @@ Added `classes` and `styles` utility functions, and `add_classes` and `add_style
 
 ### 1.4.1
 
-Attributes which clash with python keywords can now be postfixed with '_', as well as prefixed (PEP 8 recommends postfix).
+Attributes which clash with python keywords can now be postfixed with an underscore, as well as prefixed (PEP 8 recommends postfix).
 
 ## 1.4
 

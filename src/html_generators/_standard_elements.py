@@ -1,8 +1,7 @@
 '''
 Shortcut factories for all (non-svg) standard HTML elements
 '''
-from .element import Element, VoidElement, RawTextElement
-from functools import partial
+from ._element import Element, VoidElement, RawTextElement
 
 # Note - we add items to this dynamically, below
 __all__ = []
@@ -24,20 +23,24 @@ VOID_ELEMENTS = [
 	'track',
 	'wbr',
 ]
-# 
 RAW_TEXT_ELEMENTS = ['script', 'style']
 
 def registered_factory(element_name):
 	__all__.append(element_name.title())
 
-	if element_name in VOID_ELEMENTS:
-		return partial(VoidElement, element_name)
-	if element_name in RAW_TEXT_ELEMENTS:
-		return partial(RawTextElement, element_name)
-
 	# NOTE - we're ignoring some special element types (the template element, escapable raw text elements) and treating them as "normal" -> it makes little to no difference in terms of the html we generate
 	# escapable raw text elements (ie. <title>) can't have child elements. We _could_ implement those, and do extra validation, but it's not really our job to be an HTML validator - users still have to be aware of which elements are allowed inside which other elements
-	return partial(Element, element_name)
+	type_ = (
+		VoidElement if element_name in VOID_ELEMENTS 
+		else RawTextElement if element_name in RAW_TEXT_ELEMENTS
+		else Element
+	)
+
+	def factory(*args, **kwargs):
+		return type_(element_name, *args, **kwargs)
+	factory.__name__ = element_name
+	factory.__doc__ = f'''<{element_name}> {type_.__name__} factory.'''
+	return factory
 
 # List adapted from https://developer.mozilla.org/en-US/docs/Web/HTML/Element June 19, 2020
 # (doesn't include svg elements)
