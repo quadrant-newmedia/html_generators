@@ -62,20 +62,38 @@ import markupsafe
 # Ensure we don't escape markupafe.Markup
 assert_equal(str(h.Fragment(markupsafe.Markup('<i>'))), '<i>')
 # Ensure markupsafe doesn't escape us
-assert_equal(markupsafe.escape(str(h.I())), '<i></i>')
+assert_equal(markupsafe.escape(h.I()), '<i></i>')
+assert_equal(markupsafe.Markup(h.I()), '<i></i>')
+assert_equal(
+    markupsafe.Markup('a{}'.format(h.Br())),
+    'a<br>',
+)
 
-from django.utils.html import conditional_escape
+from django.conf import settings
+from django.http import StreamingHttpResponse
+from django.template import Template, Context
+from django.template.engine import Engine
+from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
+# Minimal settings allowing us to test template rendering
+settings.configure()
 # Ensure we don't escape django safe string
 assert_equal(str(h.Fragment(mark_safe('<i>'))), '<i>')
 # Ensure django doesn't escape us
-assert_equal(conditional_escape(str(h.I())), '<i></i>')
+assert_equal(conditional_escape(h.I()), '<i></i>')
+assert_equal(
+    format_html('{}', h.Br()),
+    '<br>',
+)
+assert_equal(
+    Template('{{a}}', engine=Engine()).render(
+        Context({'a': h.Br()})
+    ),
+    '<br>',
+)
 
 # "Infinite streaming response"
-from django.http import StreamingHttpResponse
-from django.conf import settings
 from itertools import count, islice
-settings.configure()
 infinite_doc = h.Document(h.Div(x) for x in count())
 bits = islice(StreamingHttpResponse(infinite_doc), 100)
 assert_equal(''.join(b.decode() for b in bits), '''<!DOCTYPE html>

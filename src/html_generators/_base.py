@@ -6,6 +6,7 @@ class SafeString(str):
 	A str of HTML that plays nicely with other web frameworks.
 
 	These objects will _not_ be escaped when passed to:
+	- django templates
 	- django.utils.html.conditional_escape
 	- markupsafe.escape
 	'''
@@ -29,6 +30,22 @@ class HTMLGenerator:
 		them directly to django.http.StreamingHttpResponse().
 		'''
 		raise NotImplementedError()
+
+	'''
+	Note:
+	__html__() allows us to be passed directly to markupsafe.Markup, 
+	markupsafe.escape, django.utils.html.format_html, and 
+	django.utils.html.conditional_escape.
+
+	It does NOT allow us to be printed directly in a django template. django.template.base.Node.render_value_in_context first calls str() 
+	on us (since we're not a subclass of str()), and _then_ calls
+	conditional_escape on the result.
+	
+	That's why we also have __str__ return a SafeString.
+	It _seems_ redundant, but it's not - they cover different scenarios.
+	'''
+	def __html__(self):
+		return str(self)
 
 	def __str__(self) -> SafeString:
 		'''
