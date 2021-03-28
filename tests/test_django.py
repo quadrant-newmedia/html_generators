@@ -2,31 +2,55 @@ import html_generators as h
 def assert_equal(a, b):
     assert a == b, f'This:\n{a}\nIs not equal to:\n{b}'
 
+import django
 from django.conf import settings
 from django.http import StreamingHttpResponse
 from django.template import Template, Context
 from django.template.engine import Engine
 from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
-# Minimal settings allowing us to test template rendering
-settings.configure()
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.test_django_settings")
+
+django.setup()
+
+prerendered_br = str(h.Br())
+
 # Ensure we don't escape django safe string
 assert_equal(str(h.Fragment(mark_safe('<i>'))), '<i>')
 # Ensure django doesn't escape us
 assert_equal(conditional_escape(h.I()), '<i></i>')
+assert_equal(conditional_escape(prerendered_br), '<br>')
 assert_equal(
     format_html('{}', h.Br()),
     '<br>',
 )
 assert_equal(
-    Template('{{a}}', engine=Engine()).render(
+    format_html('{}', prerendered_br),
+    '<br>',
+)
+assert_equal(
+    Template('{{a}}').render(
         Context({'a': h.Br()})
     ),
     '<br>',
 )
+assert_equal(
+    Template('{{a}}').render(
+        Context({'a': prerendered_br})
+    ),
+    '<br>',
+)
+# Ensure custom template tags can return us, and we won't be escaped
+assert_equal(
+    Template(
+    	'''{% load hg_tests %}{% a_br %}{% a_prerendered_br %}''',
+    ).render(
+        Context({})
+    ),
+    '<br><br>',
+)
 
-# TODO - ensure we're not escaped when returned from template tag
-# Ensure we're not escaped even if "pre-rendered"
 
 # "Infinite streaming response"
 from itertools import count, islice
