@@ -92,6 +92,9 @@ assert_equal(
     '<br>',
 )
 
+# TODO - ensure we're not escaped when returned from template tag
+# Ensure we're not escaped even if "pre-rendered"
+
 # "Infinite streaming response"
 from itertools import count, islice
 infinite_doc = h.Document(h.Div(x) for x in count())

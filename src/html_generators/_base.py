@@ -8,7 +8,7 @@ class SafeString(str):
 	These objects will _not_ be escaped when passed to:
 	- django templates
 	- django.utils.html.conditional_escape
-	- markupsafe.escape
+	- markupsafe.escape/markupsafe.Markup.format
 	'''
 	def __html__(self) -> str:
 		return self
@@ -38,8 +38,10 @@ class HTMLGenerator:
 	django.utils.html.conditional_escape.
 
 	It does NOT allow us to be printed directly in a django template. django.template.base.Node.render_value_in_context first calls str() 
-	on us (since we're not a subclass of str()), and _then_ calls
+	on us* (since we're not a subclass of str()), and _then_ calls
 	conditional_escape on the result.
+	*This is the case in Django 3.1.7, at least. I could see them changing/
+	fixing it in the future.
 	
 	That's why we also have __str__ return a SafeString.
 	It _seems_ redundant, but it's not - they cover different scenarios.
@@ -53,6 +55,9 @@ class HTMLGenerator:
 
 		Instances are only intended to be converted to a string once.
 		Calling this multiple times _may_ produce inconsistent results.
+
+		The returned str is a SafeString, which won't be escaped when passed
+		to django templates or markupsafe.
 		'''
 		return SafeString(''.join(iter(self)))
 
