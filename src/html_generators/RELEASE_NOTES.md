@@ -1,9 +1,9 @@
-# 2
+# 2.0.0
 
 Breaking changes:
 - removed add_classes, add_styles
 - attribute normalization - trim only trailing underscores (be sure to replace "_class" with "class_")
-- all submodule (other than django) are private - look for imported submodules
+- all submodules (other than django) are private - look for imported submodules
 
 ## 1.7.0
 Added cloning methods
