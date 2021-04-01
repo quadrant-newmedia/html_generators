@@ -6,7 +6,7 @@ This is the only module within html_generators that has any django
 dependencies.
 '''
 
-from .base import HTMLGenerator
+from ._base import HTMLGenerator
 from django.template.loader import render_to_string
 
 class DjangoTemplate(HTMLGenerator):

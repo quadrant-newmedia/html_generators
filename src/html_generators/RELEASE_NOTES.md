@@ -1,3 +1,6 @@
+### 2.0.1
+Fix import bug in html_generators.django
+
 # 2.0.0
 
 Breaking changes:
