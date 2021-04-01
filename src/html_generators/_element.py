@@ -39,16 +39,18 @@ class Element(HTMLGenerator):
 
 	https://html.spec.whatwg.org/multipage/syntax.html#elements-2
 
+	name_: the element name
+	- Note - the trailing underscore is so we don't collide with html name attribute
+
 	*children:
 	- these are the child nodes (text and elements) of this element
 
 	**attrs:
 	- the HTML attributes of this element
 	'''
-
 	# TODO - document that attrs are OPTIONAL strings
-	def __init__(self, name, *children: Any, **attrs: str):
-		self._name = name
+	def __init__(self, name_, *children: Any, **attrs: str):
+		self._name = name_
 		self._children = children
 		self._attrs = normalize_dict(attrs)
 
@@ -86,9 +88,12 @@ class VoidElement(Element):
 	See https://html.spec.whatwg.org/multipage/syntax.html#elements-2)
 
 	Works just like Element, but doesn't allow you to pass any children.
+
+	Note - name_ is so that h.VoidElement('input', name='FOO') doesn't complain about multiple values for argument 'name'
+	Ideally, we'd use (self, name, /, **attrs) to specify that name is positional-only, but that's only available in 3.9
 	'''
-	def __init__(self, name, **attrs):
-		super().__init__(name, **attrs)
+	def __init__(self, name_, **attrs):
+		super().__init__(name_, **attrs)
 
 	def __iter__(self):
 		yield from open_tag(self._name, self._attrs)

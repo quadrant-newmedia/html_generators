@@ -1,3 +1,6 @@
+### 2.0.2
+Bug fix - name attribute on void elements
+
 ### 2.0.1
 Fix import bug in html_generators.django
 

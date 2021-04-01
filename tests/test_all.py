@@ -2,6 +2,8 @@ import html_generators as h
 def assert_equal(a, b):
     assert a == b, f'This:\n{a}\nIs not equal to:\n{b}'
 
+assert(h.Input(name='bar'), '<input name="bar">')
+
 assert str(h.Document(
     h.Script('alert("Hello, World!");'),
     h.Body(
