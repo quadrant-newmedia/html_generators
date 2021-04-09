@@ -1,3 +1,6 @@
+## 2.1.0
+Added a few more django utilities.
+
 ### 2.0.2
 Bug fix - name attribute on void elements
 

@@ -59,6 +59,15 @@ bits = islice(StreamingHttpResponse(infinite_doc), 100)
 assert_equal(''.join(b.decode() for b in bits), '''<!DOCTYPE html>
 <div>0</div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24''')
 
+
+from django.utils import timezone
+import html_generators.django as hd
+now = timezone.now()
+assert hd.date(now, 'Y') == str(now.year)
+assert hd.static('foo.js') == '/static/foo.js'
+assert str(hd.Template('foo.html', context=dict(foo='FOO'))) == 'FOO'
+
+
 print('Django tests passed.')
 
 # TODO - test django submodule!
