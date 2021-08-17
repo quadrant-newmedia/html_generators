@@ -19,6 +19,9 @@ assert str(h.Document(
 )) == '''<!DOCTYPE html>
 <script>alert("Hello, World!");</script><body foo="bar" class="a">Direct body text with &quot;&lt;&gt;&amp;&#x27; special characters<div div-index="0">a</div><div div-index="1">b</div><div div-index="2">c</div><input type="text" value="&lt;&amp;&#x27;&#x27;&gt;"></body>'''
 
+assert_equal(str(h.Document(h.Body('body'), class_='foo')), '''<!DOCTYPE html>
+<html class="foo"><body>body</body></html>''')
+
 assert_equal(str(h.Fragment(
     'loose text',
     h.Div('a'),

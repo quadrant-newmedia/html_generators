@@ -1,3 +1,6 @@
+## 2.2.0
+`Document` now accepts kwargs as shortcut for generating html element.
+
 ## 2.1.0
 Added a few more django utilities.
 
