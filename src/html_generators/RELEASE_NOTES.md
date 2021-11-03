@@ -1,3 +1,6 @@
+## 2.3.0
+Add `template` class
+
 ## 2.2.0
 `Document` now accepts kwargs as shortcut for generating html element.
 

@@ -11,6 +11,7 @@ from ._comment import Comment  # noqa
 from ._fragment import Fragment  # noqa
 from ._join import Join  # noqa
 from ._mark_safe import MarkSafe  # noqa
+from ._template import template # noqa
 from ._utils import classes, styles  # noqa
 
 # This is for pydoc support, not for "import *" support
@@ -21,7 +22,9 @@ __all__ = [
 	'Fragment',
 	'Join',
 	'MarkSafe',
+    'template',
 	'classes',
 	'styles',
 	*_all_elements,
 ]
+
