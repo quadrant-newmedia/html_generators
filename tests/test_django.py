@@ -1,6 +1,16 @@
 import html_generators as h
-def assert_equal(a, b):
-    assert a == b, f'This:\n{a}\nIs not equal to:\n{b}'
+def assert_equal(result, expected):
+    assert result == expected, f'Result:\n{result}\nIs not equal to expected:\n{expected}'
+
+from contextlib import contextmanager
+@contextmanager
+def assert_raises(error):
+    try :
+        yield
+    except error :
+        pass
+    else :
+        raise AssertionError(f'Code did not raise {error} as expected')
 
 import django
 from django.conf import settings
@@ -60,14 +70,33 @@ assert_equal(''.join(b.decode() for b in bits), '''<!DOCTYPE html>
 <div>0</div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24''')
 
 
+import datetime
+import pytz
 from django.utils import timezone
 import html_generators.django as hd
-now = timezone.now()
-assert hd.date(now, 'Y') == str(now.year)
+
+dt = pytz.utc.localize(datetime.datetime(2000,1,1,0,0,0))
+# passing timezone=None should not change timezone
+assert_equal(hd.date(dt, 'H', timezone=None), '00')
+assert_equal(hd.date(dt, 'e', timezone=None), 'UTC')
+# passing no timezone arg should convert to current timezone, we've set default to America/Regina (-6)
+assert_equal(hd.date(dt, 'H'), '18')
+assert_equal(hd.date(dt, 'e'), 'CST')
+# passing a pytz timezone converts to that time zone
+assert_equal(hd.date(dt, 'H', timezone=pytz.timezone('America/Vancouver')), '16')
+assert_equal(hd.date(dt, 'e', timezone=pytz.timezone('America/Vancouver')), 'PST')
+
+# naive dates are allowed IFF timezone=None
+with assert_raises(ValueError):
+    hd.date(datetime.datetime.now())
+assert_equal(hd.date(datetime.datetime(2000,1,1,0,0,0), 'H', timezone=None), '00')
+
+# Make sure you can pass date or time, and we ignore timezone
+assert_equal(hd.date(datetime.date(2000,1,2), 'j'), '2')
+assert_equal(hd.date(datetime.time(1,1,1), 'H'), '01')
+
 assert hd.static('foo.js') == '/static/foo.js'
 assert str(hd.Template('foo.html', context=dict(foo='FOO'))) == 'FOO'
 
 
 print('Django tests passed.')
-
-# TODO - test django submodule!

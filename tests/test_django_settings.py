@@ -22,5 +22,5 @@ TEMPLATES=[
     },
 ]
 
-# Makes testing of date filter easier
-USE_TZ = False
+USE_TZ = True
+TIME_ZONE = 'America/Regina'
