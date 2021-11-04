@@ -76,22 +76,20 @@ from django.utils import timezone
 import html_generators.django as hd
 
 dt = pytz.utc.localize(datetime.datetime(2000,1,1,0,0,0))
-# passing timezone=None should not change timezone
-assert_equal(hd.date(dt, 'H', timezone=None), '00')
-assert_equal(hd.date(dt, 'e', timezone=None), 'UTC')
+# passing use_tz=False should not change timezone
+assert_equal(hd.date(dt, 'H', use_tz=False), '00')
+assert_equal(hd.date(dt, 'e', use_tz=False), 'UTC')
+assert_equal(hd.date(dt.astimezone(pytz.timezone('America/Vancouver')), 'H', use_tz=False), '16')
+assert_equal(hd.date(dt.astimezone(pytz.timezone('America/Vancouver')), 'e', use_tz=False), 'PST')
+
 # passing no timezone arg should convert to current timezone, we've set default to America/Regina (-6)
 assert_equal(hd.date(dt, 'H'), '18')
 assert_equal(hd.date(dt, 'e'), 'CST')
-# passing a pytz timezone converts to that time zone
-assert_equal(hd.date(dt, 'H', timezone=pytz.timezone('America/Vancouver')), '16')
-assert_equal(hd.date(dt, 'e', timezone=pytz.timezone('America/Vancouver')), 'PST')
 
-# naive dates are allowed IFF timezone=None
-with assert_raises(ValueError):
-    hd.date(datetime.datetime.now())
-assert_equal(hd.date(datetime.datetime(2000,1,1,0,0,0), 'H', timezone=None), '00')
+# naive dates are allowed, NOT converted
+assert_equal(hd.date(datetime.datetime(2000,1,1,0,0,0), 'H'), '00')
 
-# Make sure you can pass date or time, and we ignore timezone
+# Make sure you can pass date or time
 assert_equal(hd.date(datetime.date(2000,1,2), 'j'), '2')
 assert_equal(hd.date(datetime.time(1,1,1), 'H'), '01')
 

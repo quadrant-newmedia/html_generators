@@ -1,3 +1,6 @@
+## 2.4.0
+Fix behaviour of `html_generators.django.date()`. Technically this is a breaking change, but it's definitely the way it should have worked to begin with.
+
 ## 2.3.0
 Add `template` class
 
