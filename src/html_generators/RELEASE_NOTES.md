@@ -1,3 +1,7 @@
+## 2.5.0
+template() now accepts '{x}' placeholders (for xgettext compatibility), as well as '{{x}}'.
+Placeholders not passed in context are left in place, rather than removed.
+
 ## 2.4.0
 Fix behaviour of `html_generators.django.date()`. Technically this is a breaking change, but it's definitely the way it should have worked to begin with.
 

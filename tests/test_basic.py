@@ -77,11 +77,16 @@ assert_equal(str(h.template('{{x}}{{x}}', x=x)), '11')
 # x should be spent - it should have nothing left in it
 assert_equal(len(list(x)), 0)
 
-# Missing params ignored
-assert_equal(str(h.template('{{a}}{{b}}')), '')
+# Missing params unchanged
+assert_equal(str(h.template('{{a}}{{b}}')), '{{a}}{{b}}')
 
 # You can pass html
 assert_equal(str(h.template('{{a}}', a=h.Br())), '<br>')
+
+# Make sure single-brace works
+assert_equal(str(h.template('{a}{b}', a='A', b='B')), 'AB')
+assert_equal(str(h.template('{a}{b}')), '{a}{b}')
+assert_equal(str(h.template('{a}', a=h.Br())), '<br>')
 
 
 print('Basic tests passed.')
