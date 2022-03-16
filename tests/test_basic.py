@@ -88,5 +88,9 @@ assert_equal(str(h.template('{a}{b}', a='A', b='B')), 'AB')
 assert_equal(str(h.template('{a}{b}')), '{a}{b}')
 assert_equal(str(h.template('{a}', a=h.Br())), '<br>')
 
+# Make sure params are escaped
+assert_equal(str(h.template('{a}', a='1<2')), '1&lt;2')
+# Make sure HtmlGenerator params work as expected
+assert_equal(str(h.template('{a}', a=h.Br())), '<br>')
 
 print('Basic tests passed.')

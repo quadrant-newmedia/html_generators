@@ -51,7 +51,7 @@ class template(HTMLGenerator):
     def __init__(self, template, **context):
         self.template = template
 
-        # Stringify context lazily, and only once
+        # Stringify (and escape) context lazily, and only once
         # Values could be "one-shot" generators, but they should produce same result if used multiple times in template
         self.context = {
             key: _LazyString(Fragment(value))
