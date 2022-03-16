@@ -1,3 +1,6 @@
+## 2.6.0
+Added h.format(), and h.Element.open_tag()/close_tag()
+
 ## 2.5.0
 template() now accepts '{x}' placeholders (for xgettext compatibility), as well as '{{x}}'.
 Placeholders not passed in context are left in place, rather than removed.

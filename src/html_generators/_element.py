@@ -1,6 +1,7 @@
 from typing import Any
 from . import _utils as utils
-from ._base import HTMLGenerator, escape, generate_html
+from ._base import HTMLGenerator, escape, generate_html, SafeString
+from ._mark_safe import MarkSafe
 
 def open_tag(name, attrs):
 	yield '<'+name
@@ -59,6 +60,19 @@ class Element(HTMLGenerator):
 		yield from generate_html(self._children)
 		yield f'</{self._name}>'
 
+	def open_tag(self):
+		'''
+		Generate just the open tag, as a MarkSafe instance.
+		Useful when translating strings via h.format()
+		'''
+		return MarkSafe(''.join(open_tag(self._name, self._attrs)))
+	def close_tag(self):
+		'''
+		Generate just the close tag, as a MarkSafe instance.
+		Useful when translating strings via h.format()
+		'''
+		return MarkSafe(f'</{self._name}>')
+
 	def with_attrs(self, **attrs):
 		'''
 		Clone the element, with additional attributes.
@@ -97,6 +111,9 @@ class VoidElement(Element):
 
 	def __iter__(self):
 		yield from open_tag(self._name, self._attrs)
+
+	def close_tag(self):
+		return ''
 
 class RawTextElement(Element):
 	'''

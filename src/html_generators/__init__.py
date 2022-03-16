@@ -8,6 +8,7 @@ from ._element import Element  # noqa
 from ._standard_elements import *  # noqa
 from ._standard_elements import __all__ as _all_elements
 from ._comment import Comment  # noqa
+from ._format import format  # noqa
 from ._fragment import Fragment  # noqa
 from ._join import Join  # noqa
 from ._mark_safe import MarkSafe  # noqa
@@ -20,6 +21,7 @@ __all__ = [
 	'Element',
 	'Comment',
 	'Fragment',
+	'format',
 	'Join',
 	'MarkSafe',
     'template',
