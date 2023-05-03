@@ -1,6 +1,10 @@
 import html_generators as h
+from typing import Any
+
 def assert_equal(a, b):
     assert a == b, f'This:\n{a}\nIs not equal to:\n{b}'
+
+assert_equal(h.Content, Any) # documented public type alias
 
 assert_equal(str(h.Input(name='bar')), '<input name="bar">')
 

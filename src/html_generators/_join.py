@@ -1,5 +1,5 @@
-from ._base import HTMLGenerator, generate_child_html
-from typing import Any, Iterable, Iterator
+from ._base import Content, HTMLGenerator, generate_child_html
+from typing import Iterable, Iterator
 
 class Join(HTMLGenerator):
 	'''
@@ -10,7 +10,7 @@ class Join(HTMLGenerator):
 	"items" MAY contain "empty values" (None, False) - 
 	they will NOT cause an extra joiner to be rendered.
 	'''
-	def __init__(self, joiner: Any, items: Iterable[Any]):
+	def __init__(self, joiner: Content, items: Iterable[Content]):
 		# Stringify joiner only once.
 		self._joiner = str(joiner)
 		self._items = items

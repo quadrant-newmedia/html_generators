@@ -1,3 +1,6 @@
+## 2.7.0
+Added `Content` type alias
+
 ## 2.6.0
 Added h.format(), and h.Element.open_tag()/close_tag()
 

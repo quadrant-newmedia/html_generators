@@ -1,6 +1,5 @@
-from typing import Any
 from . import _utils as utils
-from ._base import HTMLGenerator, escape, generate_html, SafeString
+from ._base import Content, HTMLGenerator, escape, generate_html, SafeString
 from ._mark_safe import MarkSafe
 
 def open_tag(name, attrs):
@@ -50,7 +49,7 @@ class Element(HTMLGenerator):
 	- the HTML attributes of this element
 	'''
 	# TODO - document that attrs are OPTIONAL strings
-	def __init__(self, name_, *children: Any, **attrs: str):
+	def __init__(self, name_, *children: Content, **attrs: str):
 		self._name = name_
 		self._children = children
 		self._attrs = normalize_dict(attrs)

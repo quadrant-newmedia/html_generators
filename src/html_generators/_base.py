@@ -1,6 +1,10 @@
 from html import escape
 from typing import Any, Iterable, Iterator
 
+#: type alias; content that is intended to be passed to an HTMLGenerator
+#: see generate_child_html to understand how different types will be rendered
+Content = Any
+
 class SafeString(str):
 	'''
 	A str of HTML that plays nicely with other web frameworks.
@@ -61,7 +65,7 @@ class HTMLGenerator:
 		'''
 		return SafeString(''.join(iter(self)))
 
-def generate_child_html(child: Any) -> Iterator[str]:
+def generate_child_html(child: Content) -> Iterator[str]:
 	'''
 	Generate a sequence of HTML strings from the given object.
 
@@ -111,6 +115,6 @@ def generate_child_html(child: Any) -> Iterator[str]:
 	yield escape(str(child))
 
 
-def generate_html(children: Iterable[Any]) -> Iterator[str]:
+def generate_html(children: Iterable[Content]) -> Iterator[str]:
 	for child in children :
 		yield from generate_child_html(child)
