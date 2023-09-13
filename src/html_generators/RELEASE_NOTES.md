@@ -1,3 +1,6 @@
+### 1.7.1
+Fix issue in Join() when first item is empty
+
 ## 1.7.0
 Added cloning methods
 

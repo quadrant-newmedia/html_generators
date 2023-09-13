@@ -14,7 +14,7 @@ class Join(HTMLGenerator):
             # Skip "explicitly empty" items, just like all other generators
             # Be sure we do NOT add a joiner for this empty item
             if child is None or child is False :
-                return
+                continue
 
             if not first_item :
                 yield from self.joiner
