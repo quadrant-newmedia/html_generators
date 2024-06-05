@@ -1,5 +1,5 @@
 from ._base import HTMLGenerator, generate_html
-from ._standard_elements import Html
+from ._element import Element
 
 
 class Document(HTMLGenerator):
@@ -13,7 +13,7 @@ class Document(HTMLGenerator):
     """
 
     def __init__(self, *children, **html_attrs):
-        self._children = [Html(children, **html_attrs)] if html_attrs else children
+        self._children = [Element("html", children, **html_attrs)] if html_attrs else children
 
     def __iter__(self):
         yield "<!DOCTYPE html>\n"
