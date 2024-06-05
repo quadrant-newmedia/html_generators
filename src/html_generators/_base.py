@@ -5,37 +5,40 @@ from typing import Any, Iterable, Iterator
 #: see generate_child_html to understand how different types will be rendered
 Content = Any
 
-class SafeString(str):
-	'''
-	A str of HTML that plays nicely with other web frameworks.
 
-	These objects will _not_ be escaped when passed to:
-	- django templates
-	- django.utils.html.conditional_escape
-	- markupsafe.escape/markupsafe.Markup.format
-	'''
-	def __html__(self) -> str:
-		return self
+class SafeString(str):
+    """
+    A str of HTML that plays nicely with other web frameworks.
+
+    These objects will _not_ be escaped when passed to:
+    - django templates
+    - django.utils.html.conditional_escape
+    - markupsafe.escape/markupsafe.Markup.format
+    """
+
+    def __html__(self) -> str:
+        return self
+
 
 class HTMLGenerator:
-	'''
-	An object representing a balanced chunk of HTML.
+    """
+    An object representing a balanced chunk of HTML.
 
-	This is the base class for all of our public classes.
-	It is not intended to be used directly by end users.
-	'''
+    This is the base class for all of our public classes.
+    It is not intended to be used directly by end users.
+    """
 
-	def __iter__(self) -> Iterator[str]:
-		'''
-		Generate a sequence of HTML strings.
+    def __iter__(self) -> Iterator[str]:
+        """
+        Generate a sequence of HTML strings.
 
-		Generally, users will be casting/coercing HTMLGenerators to str, but
-		their iterable nature is sometimes useful. For example, you can pass
-		them directly to django.http.StreamingHttpResponse().
-		'''
-		raise NotImplementedError()
+        Generally, users will be casting/coercing HTMLGenerators to str, but
+        their iterable nature is sometimes useful. For example, you can pass
+        them directly to django.http.StreamingHttpResponse().
+        """
+        raise NotImplementedError()
 
-	'''
+    """
 	Note:
 	__html__() allows us to be passed directly to markupsafe.Markup, 
 	markupsafe.escape, django.utils.html.format_html, and 
@@ -49,72 +52,74 @@ class HTMLGenerator:
 	
 	That's why we also have __str__ return a SafeString.
 	It _seems_ redundant, but it's not - they cover different scenarios.
-	'''
-	def __html__(self):
-		return str(self)
+	"""
 
-	def __str__(self) -> SafeString:
-		'''
-		Convert to a balanced string of HTML.
+    def __html__(self):
+        return str(self)
 
-		Instances are only intended to be converted to a string once.
-		Calling this multiple times _may_ produce inconsistent results.
+    def __str__(self) -> SafeString:
+        """
+        Convert to a balanced string of HTML.
 
-		The returned str is a SafeString, which won't be escaped when passed
-		to django templates or markupsafe.
-		'''
-		return SafeString(''.join(iter(self)))
+        Instances are only intended to be converted to a string once.
+        Calling this multiple times _may_ produce inconsistent results.
+
+        The returned str is a SafeString, which won't be escaped when passed
+        to django templates or markupsafe.
+        """
+        return SafeString("".join(iter(self)))
+
 
 def generate_child_html(child: Content) -> Iterator[str]:
-	'''
-	Generate a sequence of HTML strings from the given object.
+    """
+    Generate a sequence of HTML strings from the given object.
 
-	The sequence of strings, as a whole, will be a balanced HTML fragment.
+    The sequence of strings, as a whole, will be a balanced HTML fragment.
 
-	We can't really describe the behaviour of this function any more 
-	concisely than the code does, so just read the code.
-	'''
+    We can't really describe the behaviour of this function any more
+    concisely than the code does, so just read the code.
+    """
 
-	# use case: "conditional children"
-	# ie: h.Div(some_test() and 'A conditional child')
-	# Do _not_ just check "if child" - h.Div(0) should render <div>0</div>
-	if child is None or child is False :
-		return
+    # use case: "conditional children"
+    # ie: h.Div(some_test() and 'A conditional child')
+    # Do _not_ just check "if child" - h.Div(0) should render <div>0</div>
+    if child is None or child is False:
+        return
 
-	# Many children will be other (nested) HTMLGenerators
-	# Do _not_ call str(child) -> yield directly from it, so that HTML is generated "in order", and we only do string joining at the outer-most level
-	if isinstance(child, HTMLGenerator):
-		yield from child
-		return
+    # Many children will be other (nested) HTMLGenerators
+    # Do _not_ call str(child) -> yield directly from it, so that HTML is generated "in order", and we only do string joining at the outer-most level
+    if isinstance(child, HTMLGenerator):
+        yield from child
+        return
 
-	# Support "Safe Strings" from other libraries (ie. Django) that implement __html__ method
-	# This allows you to use existing template tag/filter functions without wrapping the output in MarkSafe()
-	try :
-		html_method = child.__html__
-	except (AttributeError, TypeError):
-		pass
-	else :
-		yield html_method()
-		return
+    # Support "Safe Strings" from other libraries (ie. Django) that implement __html__ method
+    # This allows you to use existing template tag/filter functions without wrapping the output in MarkSafe()
+    try:
+        html_method = child.__html__
+    except (AttributeError, TypeError):
+        pass
+    else:
+        yield html_method()
+        return
 
-	# Look for strings _before_ looking for other iterables, since strings are iterable, too
-	if isinstance(child, str):
-		yield escape(child)
-		return
-	# If it's iterable, generate html for each of its items
-	# Could be a tuple, list, generator expression, etc.
-	try :
-		i = iter(child)
-	except TypeError :
-		pass
-	else :
-		for grandchild in i :
-			yield from generate_child_html(grandchild)
-		return
+    # Look for strings _before_ looking for other iterables, since strings are iterable, too
+    if isinstance(child, str):
+        yield escape(child)
+        return
+    # If it's iterable, generate html for each of its items
+    # Could be a tuple, list, generator expression, etc.
+    try:
+        i = iter(child)
+    except TypeError:
+        pass
+    else:
+        for grandchild in i:
+            yield from generate_child_html(grandchild)
+        return
 
-	yield escape(str(child))
+    yield escape(str(child))
 
 
 def generate_html(children: Iterable[Content]) -> Iterator[str]:
-	for child in children :
-		yield from generate_child_html(child)
+    for child in children:
+        yield from generate_child_html(child)

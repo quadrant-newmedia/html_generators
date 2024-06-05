@@ -614,5 +614,3 @@ def Script(*children: Content, **attrs: Content) -> RawTextElement:
 
 def Style(*children: Content, **attrs: Content) -> RawTextElement:
     return RawTextElement("style", *children, **attrs)
-
-
