@@ -14,13 +14,17 @@ this entire module with a convenient alias:
 import html_generators.django as hd
 """
 
-from ._base import HTMLGenerator
 import datetime
+from typing import Optional
+
 from django.conf import settings
-from django.templatetags.static import static
+from django.http import HttpRequest
 from django.template.defaultfilters import date as _date
 from django.template.loader import render_to_string
-from django.utils.timezone import is_naive, get_current_timezone
+from django.templatetags.static import static
+from django.utils.timezone import get_current_timezone, is_naive
+
+from ._base import HTMLGenerator
 
 __all__ = [
     "date",
@@ -31,7 +35,8 @@ __all__ = [
 DEFAULT = object()
 
 
-def date(value, format=None, use_tz=None):
+# TODO add type for value, confirm other param types
+def date(value, format: Optional[str] = None, use_tz: Optional[str] = None):
     """
     Works similar to the django date templatefilter.
 
@@ -64,13 +69,14 @@ class Template(HTMLGenerator):
     helps achieve that.
     """
 
-    def __init__(self, template_name, request=None, context=None, using=None):
+    # TODO confirm types
+    def __init__(self, template_name: str, request: Optional[HttpRequest] = None, context=None, using=None):
         self.template_name = template_name
         self.request = request
         self.context = context
         self.using = using
 
-    def __iter__(self):
+    def __iter__(self):  # TODO add return type
         yield render_to_string(
             self.template_name,
             context=self.context,

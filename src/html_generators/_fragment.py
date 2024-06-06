@@ -1,4 +1,4 @@
-from ._base import HTMLGenerator, generate_html
+from ._base import Content, HTMLGenerator, generate_html
 
 
 class Fragment(HTMLGenerator):
@@ -10,8 +10,8 @@ class Fragment(HTMLGenerator):
     Useful only when you need to render multiple nodes directly to a string (ie. to pass off to some other template system, or to generate the body of an HTML email).
     """
 
-    def __init__(self, *children):
+    def __init__(self, *children: Content):
         self._children = children
 
-    def __iter__(self):
+    def __iter__(self):  # TODO return type
         yield from generate_html(self._children)

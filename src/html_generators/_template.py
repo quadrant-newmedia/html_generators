@@ -1,5 +1,6 @@
 import re
-from ._base import HTMLGenerator, escape
+
+from ._base import Content, HTMLGenerator
 from ._fragment import Fragment
 
 
@@ -12,7 +13,7 @@ class _LazyString:
     TODO - export this? Could be useful elsewhere
     """
 
-    def __init__(self, source):
+    def __init__(self, source: Content):
         self.source = source
         self.string = None
 
@@ -52,17 +53,18 @@ class template(HTMLGenerator):
     (but xgettext usually identifies them properly)
     """
 
-    def __init__(self, template, **context):
+    def __init__(self, template: Content, **context: Content):
         self.template = template
 
         # Stringify (and escape) context lazily, and only once
         # Values could be "one-shot" generators, but they should produce same result if used multiple times in template
         self.context = {key: _LazyString(Fragment(value)) for key, value in context.items()}
 
-    def __iter__(self):
+    def __iter__(self):  # TODO return type
         # escape template, unless it's already a "safe" object
         template = str(Fragment(self.template))
 
+        # TODO add types
         def get_replacement(match):
             try:
                 value = self.context[match.group(1)]

@@ -1,9 +1,11 @@
+from typing import Dict
+
 from . import _utils as utils
 from ._base import Content, HTMLGenerator, escape, generate_html
 from ._mark_safe import MarkSafe
 
 
-def open_tag(name, attrs):
+def open_tag(name: str, attrs: Dict[str, Content]):  # TODO add return type
     yield "<" + name
     for key, value in attrs.items():
         if value is False or value is None:
@@ -16,7 +18,7 @@ def open_tag(name, attrs):
     yield ">"
 
 
-def normalize(attr):
+def normalize(attr: str) -> str:
     """
     Convert a keyword parameter name to an HTML attribute name.
 
@@ -34,7 +36,7 @@ def normalize(attr):
     return attr.rstrip("_").replace("_", "-")
 
 
-def normalize_dict(attrs):
+def normalize_dict(attrs: Dict[str, Content]) -> Dict[str, Content]:
     return {normalize(attr): value for attr, value in attrs.items()}
 
 
@@ -55,31 +57,31 @@ class Element(HTMLGenerator):
     """
 
     # TODO - document that attrs are OPTIONAL strings
-    def __init__(self, name_, *children: Content, **attrs: str):
+    def __init__(self, name_: str, *children: Content, **attrs: Dict[str, Content]):
         self._name = name_
         self._children = children
         self._attrs = normalize_dict(attrs)
 
-    def __iter__(self):
+    def __iter__(self):  # TODO add return type
         yield from open_tag(self._name, self._attrs)
         yield from generate_html(self._children)
         yield f"</{self._name}>"
 
-    def open_tag(self):
+    def open_tag(self) -> MarkSafe:
         """
         Generate just the open tag, as a MarkSafe instance.
         Useful when translating strings via h.format()
         """
         return MarkSafe("".join(open_tag(self._name, self._attrs)))
 
-    def close_tag(self):
+    def close_tag(self) -> MarkSafe:
         """
         Generate just the close tag, as a MarkSafe instance.
         Useful when translating strings via h.format()
         """
         return MarkSafe(f"</{self._name}>")
 
-    def with_attrs(self, **attrs):
+    def with_attrs(self, **attrs: Dict[str, Content]):  # TODO is return type necessary?
         """
         Clone the element, with additional attributes.
 
@@ -91,13 +93,13 @@ class Element(HTMLGenerator):
         clone._attrs = dict(self._attrs, **normalize_dict(attrs))
         return clone
 
-    def with_classes(self, *classes):
+    def with_classes(self, *classes):  # TODO return type
         """Clone the element, with additional classes."""
         return self.with_attrs(
             class_=utils.classes(self._attrs.get("class"), *classes),
         )
 
-    def with_styles(self, *styles):
+    def with_styles(self, *styles):  # TODO return type
         """Clone the element, with additional styles."""
         return self.with_attrs(
             style=utils.styles(self._attrs.get("style"), *styles),
@@ -116,14 +118,14 @@ class VoidElement(Element):
     Ideally, we'd use (self, name, /, **attrs) to specify that name is positional-only, but that's only available in 3.9
     """
 
-    def __init__(self, name_, **attrs):
+    def __init__(self, name_: str, **attrs: Dict[str, Content]):
         super().__init__(name_, **attrs)
 
-    def __iter__(self):
+    def __iter__(self):  # TODO return type
         yield from open_tag(self._name, self._attrs)
 
-    def close_tag(self):
-        return ""
+    def close_tag(self) -> MarkSafe:  # TODO added MarkSafe wrapper to match Element signature
+        return MarkSafe("")
 
 
 class RawTextElement(Element):
@@ -141,11 +143,11 @@ class RawTextElement(Element):
     https://html.spec.whatwg.org/multipage/syntax.html#cdata-rcdata-restrictions)
     """
 
-    def __init__(self, name, *content, **attrs):
+    def __init__(self, name: str, *content: Content, **attrs: Dict[str, Content]):
         super().__init__(name, **attrs)
         self._content = content
 
-    def __iter__(self):
+    def __iter__(self):  # TODO return type
         yield from open_tag(self._name, self._attrs)
 
         # stringify whatever the user passed in.

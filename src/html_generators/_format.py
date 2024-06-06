@@ -2,6 +2,7 @@ from ._fragment import Fragment
 from ._mark_safe import MarkSafe
 
 
+# TODO add param and return types
 def format(*template, **context):
     """
     Useful when injecting html into translatable strings.

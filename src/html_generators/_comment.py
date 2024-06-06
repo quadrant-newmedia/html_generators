@@ -1,4 +1,4 @@
-from ._base import HTMLGenerator
+from ._base import Content, HTMLGenerator
 
 
 class Comment(HTMLGenerator):
@@ -10,7 +10,7 @@ class Comment(HTMLGenerator):
     Not really sure why you'd need to add comments (your code can just have python comments), but it's here in case you need it.
     """
 
-    def __init__(self, content):
+    def __init__(self, content: Content):
         self._content = content
 
     def __iter__(self):

@@ -1,4 +1,6 @@
-from ._base import HTMLGenerator, generate_html
+from typing import Iterator
+
+from ._base import Content, HTMLGenerator, generate_html
 from ._element import Element
 
 
@@ -12,9 +14,9 @@ class Document(HTMLGenerator):
     element with the specified attrs. Just a shortcut.
     """
 
-    def __init__(self, *children, **html_attrs):
+    def __init__(self, *children: Content, **html_attrs: Content):
         self._children = [Element("html", children, **html_attrs)] if html_attrs else children
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:  # TODO confirm return type
         yield "<!DOCTYPE html>\n"
         yield from generate_html(self._children)
