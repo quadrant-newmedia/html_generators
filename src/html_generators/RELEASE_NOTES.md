@@ -1,3 +1,6 @@
+## 2.8.0
+Add type annotations
+
 ## 2.7.0
 Added `Content` type alias
 
