@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Iterator
 
 from ._base import Content, HTMLGenerator, generate_child_html
 
@@ -18,7 +18,7 @@ class Join(HTMLGenerator):
         self._joiner = str(joiner)
         self._items = items
 
-    def __iter__(self):  # TODO return type
+    def __iter__(self) -> Iterator[str]:
         first_item = True
         for child in self._items:
             # Skip "explicitly empty" items, just like all other generators

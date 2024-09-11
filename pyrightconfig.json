@@ -1,4 +1,4 @@
 {
     "typeCheckingMode": "strict",
-    "exclude": ["**/node_modules", "**/__pycache__", "**/.*", "**/migrations", "venv"]
+    "include": ["src/"]
 }

@@ -1,9 +1,13 @@
 from html import escape
-from typing import Any, Iterable, Iterator
+from typing import Any, Iterable, Iterator, Union
+
+from typing_extensions import Literal
 
 #: type alias; content that is intended to be passed to an HTMLGenerator
 #: see generate_child_html to understand how different types will be rendered
 Content = Any
+
+OptionalString = Union[None, Literal[False], str]
 
 
 class SafeString(str):

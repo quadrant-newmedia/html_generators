@@ -1,9 +1,9 @@
+from ._base import Content
 from ._fragment import Fragment
 from ._mark_safe import MarkSafe
 
 
-# TODO add param and return types
-def format(*template, **context):
+def format(*template: Content, **context: Content) -> MarkSafe:
     """
     Useful when injecting html into translatable strings.
     The template gets (conditionally) escaped, as do all of the context values.
@@ -20,10 +20,10 @@ def format(*template, **context):
     """
 
     # Escape template, as needed
-    template = str(Fragment(template))
+    escaped = str(Fragment(template))
 
     return MarkSafe(
-        template.format(
+        escaped.format(
             **{
                 # escape context, as needed
                 k: str(Fragment(v))

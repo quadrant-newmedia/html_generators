@@ -2,12 +2,21 @@
 Various utility methods for building html attributes.
 """
 
+from typing import Iterable
 
-def styles(*styles):
-    """Join multiple "conditional styles" and return a single style attribute"""
-    return "; ".join(filter(None, styles))
+from ._base import OptionalString
 
 
-def classes(*classes):
-    """Join multiple "conditional classes" and return a single class attribute"""
-    return " ".join(filter(None, classes))
+# Note: not sure why this passes type testing and filter(None, optional_strings) doesn't
+def _iter_strings(optional_strings: Iterable[OptionalString]) -> Iterable[str]:
+    for s in optional_strings:
+        if s:
+            yield s
+
+
+def styles(*_styles: OptionalString):
+    return "; ".join(_iter_strings(_styles))
+
+
+def classes(*_classes: OptionalString):
+    return " ".join(_iter_strings(_classes))

@@ -1,11 +1,11 @@
-from typing import Dict
+from typing import Any, Dict, Iterator
 
-from . import _utils as utils
-from ._base import Content, HTMLGenerator, escape, generate_html
+from . import _utils as utils  # pyright: ignore [reportPrivateUsage]
+from ._base import Content, HTMLGenerator, OptionalString, escape, generate_html
 from ._mark_safe import MarkSafe
 
 
-def open_tag(name: str, attrs: Dict[str, Content]):  # TODO add return type
+def open_tag(name: str, attrs: Dict[str, Content]):
     yield "<" + name
     for key, value in attrs.items():
         if value is False or value is None:
@@ -56,13 +56,12 @@ class Element(HTMLGenerator):
     - the HTML attributes of this element
     """
 
-    # TODO - document that attrs are OPTIONAL strings
-    def __init__(self, name_: str, *children: Content, **attrs: Dict[str, Content]):
+    def __init__(self, name_: str, *children: Content, **attrs: Any):
         self._name = name_
         self._children = children
         self._attrs = normalize_dict(attrs)
 
-    def __iter__(self):  # TODO add return type
+    def __iter__(self) -> Iterator[str]:
         yield from open_tag(self._name, self._attrs)
         yield from generate_html(self._children)
         yield f"</{self._name}>"
@@ -81,7 +80,7 @@ class Element(HTMLGenerator):
         """
         return MarkSafe(f"</{self._name}>")
 
-    def with_attrs(self, **attrs: Dict[str, Content]):  # TODO is return type necessary?
+    def with_attrs(self, **attrs: Content):
         """
         Clone the element, with additional attributes.
 
@@ -93,13 +92,13 @@ class Element(HTMLGenerator):
         clone._attrs = dict(self._attrs, **normalize_dict(attrs))
         return clone
 
-    def with_classes(self, *classes):  # TODO return type
+    def with_classes(self, *classes: OptionalString):
         """Clone the element, with additional classes."""
         return self.with_attrs(
             class_=utils.classes(self._attrs.get("class"), *classes),
         )
 
-    def with_styles(self, *styles):  # TODO return type
+    def with_styles(self, *styles: OptionalString):
         """Clone the element, with additional styles."""
         return self.with_attrs(
             style=utils.styles(self._attrs.get("style"), *styles),
@@ -121,10 +120,10 @@ class VoidElement(Element):
     def __init__(self, name_: str, **attrs: Dict[str, Content]):
         super().__init__(name_, **attrs)
 
-    def __iter__(self):  # TODO return type
+    def __iter__(self) -> Iterator[str]:
         yield from open_tag(self._name, self._attrs)
 
-    def close_tag(self) -> MarkSafe:  # TODO added MarkSafe wrapper to match Element signature
+    def close_tag(self) -> MarkSafe:
         return MarkSafe("")
 
 
@@ -147,7 +146,7 @@ class RawTextElement(Element):
         super().__init__(name, **attrs)
         self._content = content
 
-    def __iter__(self):  # TODO return type
+    def __iter__(self) -> Iterator[str]:
         yield from open_tag(self._name, self._attrs)
 
         # stringify whatever the user passed in.

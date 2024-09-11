@@ -17,6 +17,6 @@ class Document(HTMLGenerator):
     def __init__(self, *children: Content, **html_attrs: Content):
         self._children = [Element("html", children, **html_attrs)] if html_attrs else children
 
-    def __iter__(self) -> Iterator[str]:  # TODO confirm return type
+    def __iter__(self) -> Iterator[str]:
         yield "<!DOCTYPE html>\n"
         yield from generate_html(self._children)

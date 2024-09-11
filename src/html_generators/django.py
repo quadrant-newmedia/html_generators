@@ -15,7 +15,7 @@ import html_generators.django as hd
 """
 
 import datetime
-from typing import Optional
+from typing import Any, Iterator, Optional, Union
 
 from django.conf import settings
 from django.http import HttpRequest
@@ -35,8 +35,9 @@ __all__ = [
 DEFAULT = object()
 
 
-# TODO add type for value, confirm other param types
-def date(value, format: Optional[str] = None, use_tz: Optional[str] = None):
+def date(
+    value: Union[datetime.datetime, datetime.date], format: Optional[str] = None, use_tz: Optional[str] = None
+) -> str:
     """
     Works similar to the django date templatefilter.
 
@@ -69,14 +70,19 @@ class Template(HTMLGenerator):
     helps achieve that.
     """
 
-    # TODO confirm types
-    def __init__(self, template_name: str, request: Optional[HttpRequest] = None, context=None, using=None):
+    def __init__(
+        self,
+        template_name: str,
+        request: Optional[HttpRequest] = None,
+        context: Optional["dict[str, Any]"] = None,
+        using: Optional[str] = None,
+    ):
         self.template_name = template_name
         self.request = request
         self.context = context
         self.using = using
 
-    def __iter__(self):  # TODO add return type
+    def __iter__(self) -> Iterator[str]:
         yield render_to_string(
             self.template_name,
             context=self.context,

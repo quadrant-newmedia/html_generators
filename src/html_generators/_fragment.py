@@ -1,3 +1,5 @@
+from typing import Iterator
+
 from ._base import Content, HTMLGenerator, generate_html
 
 
@@ -13,5 +15,5 @@ class Fragment(HTMLGenerator):
     def __init__(self, *children: Content):
         self._children = children
 
-    def __iter__(self):  # TODO return type
+    def __iter__(self) -> Iterator[str]:
         yield from generate_html(self._children)

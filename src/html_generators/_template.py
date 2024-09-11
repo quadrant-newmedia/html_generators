@@ -1,4 +1,5 @@
 import re
+from typing import Iterator
 
 from ._base import Content, HTMLGenerator
 from ._fragment import Fragment
@@ -60,12 +61,11 @@ class template(HTMLGenerator):
         # Values could be "one-shot" generators, but they should produce same result if used multiple times in template
         self.context = {key: _LazyString(Fragment(value)) for key, value in context.items()}
 
-    def __iter__(self):  # TODO return type
+    def __iter__(self) -> Iterator[str]:
         # escape template, unless it's already a "safe" object
         template = str(Fragment(self.template))
 
-        # TODO add types
-        def get_replacement(match):
+        def get_replacement(match: "re.Match[str]") -> str:
             try:
                 value = self.context[match.group(1)]
             except KeyError:
